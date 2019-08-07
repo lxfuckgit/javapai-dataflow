@@ -58,6 +58,10 @@ public final class UBTRecord {
 	 * <th align=left>-类型-
 	 * <th align=left>-描述-
 	 * <tr>
+	 * <td><code>$ip</code>
+	 * <td><code>String</code>
+	 * <td><code>请求IP</code>
+	 * <tr>
 	 * <td><code>$os</code>
 	 * <td><code>String</code>
 	 * <td><code>操作系统</code>
