@@ -110,6 +110,51 @@ public final class UBTController {
 	}
 	
 	/**
+	 * 记录用户的注册/登录事件及关联的Properties，把注册账号作为用户的唯一标识。
+	 *
+	 * @param body
+	 *            事件消息体
+	 */
+//	@CrossOrigin
+//	@RequestMapping(value = "/trackSignup", method = RequestMethod.POST)
+//	public void trackSignup(@RequestBody String body) {
+//		logger.info("------------>" + body);
+//		//trackSignup与trackEvent有什么区别或意义；biz用在什么地方，文档还提到日志埋点或是业务埋点 有用吗
+//		
+//		UBTEvent event = JSONObject.parseObject(body, UBTEvent.class);
+//		if (filterEvent(event)) {
+//			long currentTime = System.currentTimeMillis();
+//			if (event.getTimestamp() <= 0 || event.getTimestamp() > currentTime) {
+//				event.setTimestamp(currentTime);
+//			}
+//
+//			if (event.getProperty("$ip") == null) {
+////				String ip = Commons.getRemoteAddr(request);
+////				event.addProperty("$ip", ip);
+//			}
+//
+//			// UBTrackingService.trackSignup(event);
+//			kafkaTemplate.sendDefault("signup", body);
+//		}
+//	}
+	
+//	@CrossOrigin
+//	@RequestMapping(value = "/getClientIP", method = RequestMethod.GET)
+//	@ResponseBody
+//	public String getClientIP() {
+//		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//		HttpServletRequest request = requestAttributes.getRequest();
+//		return Commons.getRemoteAddr(request);
+//	}
+	
+//	@CrossOrigin
+//	@RequestMapping(value = "/getCurrentDate", method = RequestMethod.GET)
+//	@ResponseBody
+//	public String getCurrentDate() {
+//		return new SimpleDateFormat("yyyyMMdd").format(new Date());
+//	}
+	
+	/**
 	 * 
 	 * @return
 	 */
