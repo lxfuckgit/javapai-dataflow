@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -155,10 +155,11 @@ public final class UBTController {
 //	}
 	
 	/**
+	 * 同步服务端时间辍。<br>
 	 * 
-	 * @return
+	 * @return 服务端时间辍.
 	 */
-	@GetMapping(value = "/getCurrentTimestamp")
+	@RequestMapping(value = "/getCurrentTimestamp")
 	@ResponseBody
 	public long getCurrentTimestamp() {
 		return System.currentTimeMillis();
