@@ -1,15 +1,5 @@
 package com.javapai.dataflow.collector.domain;
 
-//import com.mobanker.framework.es.ElasticsearchField;
-//import com.mobanker.framework.es.ElasticsearchIndex;
-//import com.mobanker.framework.hbase.dao.annonation.DatabaseField;
-//import com.mobanker.framework.hbase.dao.annonation.DatabaseTable;
-//import com.mobanker.framework.hive.dao.annonation.HiveField;
-//import com.mobanker.framework.hive.dao.annonation.HiveTable;
-//import com.mobanker.framework.hive.dao.model.BaseModel;
-
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +10,8 @@ import org.springframework.data.elasticsearch.annotations.Document;
  * 用户行为事件
  * <p/>
  */
-@Document(indexName = "ubt", type = "UbtEvent")
-public class Event  {
+@Document(indexName = "UbtEvent", type = "ubt")
+public class UBTEvent  {
 	@Id
     private String id;
 
