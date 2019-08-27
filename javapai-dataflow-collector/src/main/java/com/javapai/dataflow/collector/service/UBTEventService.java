@@ -3,7 +3,7 @@ package com.javapai.dataflow.collector.service;
 import java.util.Date;
 import java.util.List;
 
-import com.javapai.dataflow.collector.domain.Event;
+import com.javapai.dataflow.collector.domain.UBTEvent;
 
 public interface UBTEventService {
 	
@@ -12,14 +12,14 @@ public interface UBTEventService {
 	 * 
 	 * @param event
 	 */
-	public void insertUbtEvent(Event event);
+	public void insertUbtEvent(UBTEvent event);
 
 	/**
 	 * 记录多条UBT事件行为.<br>
 	 * 
 	 * @param events
 	 */
-	public void insertUbtEvents(List<Event> events);
+	public void insertUbtEvents(List<UBTEvent> events);
 
 	/**
 	 * 按条件查询UBT事件.<br>
@@ -35,7 +35,7 @@ public interface UBTEventService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Event> queryUbtEvents(String domain, Date startDate, Date endDate, String... actions);
+	public List<UBTEvent> queryUbtEvents(String domain, Date startDate, Date endDate, String... actions);
 	
 	/**
 	 * 按条件查询UBT事件.<br>
@@ -47,6 +47,6 @@ public interface UBTEventService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Event> queryTodayUbtEvents(String appId, String... actions);
+	public List<UBTEvent> queryTodayUbtEvents(String appId, String... actions);
 
 }

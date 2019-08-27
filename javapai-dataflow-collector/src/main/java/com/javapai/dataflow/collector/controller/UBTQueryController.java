@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javapai.dataflow.collector.controller.dto.QueryEventDTO;
-import com.javapai.dataflow.collector.domain.Event;
+import com.javapai.dataflow.collector.domain.UBTEvent;
 import com.javapai.dataflow.collector.service.UBTEventService;
 
 @RestController
@@ -34,7 +34,7 @@ public class UBTQueryController {
 	 * @throws Exception
 	 */
     @RequestMapping(value = "/ubt/queryUbtEvent", method = RequestMethod.POST)
-    public List<Event> queryUbtEvent(@RequestBody QueryEventDTO dto) {
+    public List<UBTEvent> queryUbtEvent(@RequestBody QueryEventDTO dto) {
 		logger.info("query ubt event:{},{}", dto.getStartDate(), dto.getEndDate());
 		
 //		if(StringUtils.isEmpty(endDate)) {
@@ -69,7 +69,7 @@ public class UBTQueryController {
 	 * @throws Exception
 	 */
     @RequestMapping(value = "/ubt/queryTodayUbtEvent", method = RequestMethod.POST)
-    public List<Event> queryTodayUbtEvent(@RequestBody String appId) {
+    public List<UBTEvent> queryTodayUbtEvent(@RequestBody String appId) {
     	return ubtEventService.queryTodayUbtEvents(appId, "");
     }
 

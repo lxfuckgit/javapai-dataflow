@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.javapai.dataflow.collector.domain.Event;
+import com.javapai.dataflow.collector.domain.UBTEvent;
 import com.javapai.dataflow.collector.service.UBTEventService;
 
 @Component
@@ -32,9 +32,9 @@ public class UBTConsumer {
 		logger.debug("------------->kafka的key: " + record.key());
 		logger.debug("------------->kafka的value: " + record.value());
 		if (null == record.key()) {
-			ubtEventService.insertUbtEvent(JSONObject.parseObject(record.value(), Event.class));
+			ubtEventService.insertUbtEvent(JSONObject.parseObject(record.value(), UBTEvent.class));
 		} else if ("batch".equals(record.key())) {
-			ubtEventService.insertUbtEvents(JSONArray.parseArray(record.value(), Event.class));
+			ubtEventService.insertUbtEvents(JSONArray.parseArray(record.value(), UBTEvent.class));
 		}
 	}
 

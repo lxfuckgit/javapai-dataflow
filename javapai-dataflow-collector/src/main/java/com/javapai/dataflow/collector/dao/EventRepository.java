@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
-import com.javapai.dataflow.collector.domain.Event;
+import com.javapai.dataflow.collector.domain.UBTEvent;
 
 @Repository
-public interface EventRepository extends ElasticsearchRepository<Event, String> {
-	public List<Event> findByAppId(String appId);
+public interface EventRepository extends ElasticsearchRepository<UBTEvent, String> {
+	public List<UBTEvent> findByAppId(String appId);
 }
