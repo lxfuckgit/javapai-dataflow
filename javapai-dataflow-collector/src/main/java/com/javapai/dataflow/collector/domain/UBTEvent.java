@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
  * 用户行为事件
  * <p/>
  */
-@Document(indexName = "UbtEvent", type = "ubt")
+@Document(indexName = "ubt_event", type = "ubt")
 public class UBTEvent  {
 	@Id
     private String id;
