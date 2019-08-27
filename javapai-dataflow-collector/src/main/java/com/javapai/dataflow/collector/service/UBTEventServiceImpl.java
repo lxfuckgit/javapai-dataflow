@@ -1,5 +1,7 @@
 package com.javapai.dataflow.collector.service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,14 +21,14 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.javapai.dataflow.collector.business.UBTBusiness;
-import com.javapai.dataflow.collector.dao.EventRepository;
+import com.javapai.dataflow.collector.dao.UBTEventRepository;
 //import com.javapai.module.monitor.ubt.DateUtil;
 //import com.javapai.module.monitor.ubt.business.UBTBusiness;
 //import com.javapai.module.monitor.ubt.dao.UBTEventESDao;
 //import com.javapai.module.monitor.ubt.domain.Event;
 //import com.mobanker.eagleeye.matrix.ubt.business.impl.UBTrackEventBusinessImpl.QueryUbtEventTask;
 //import com.mobanker.eagleeye.matrix.ubt.dao.UBTEventESDao;
-import com.javapai.dataflow.collector.domain.Event;
+import com.javapai.dataflow.collector.domain.UBTEvent;
 import com.javapai.dataflow.collector.utils.DateUtil;
 
 @Service
@@ -35,19 +37,9 @@ public class UBTEventServiceImpl implements UBTEventService {
 	 * 
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(UBTEventServiceImpl.class);
+	LocalDateTime midnight = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
 	
 	public static final String pattern = "yyMMddHHmmss";
-	
-//    @Autowired
-//    private UBTEventESDao esDao;
-	
-	// @Autowired
-	// private UBTEventDao UBTEventDao;
-	//
-	// @Autowired
-	// private UBTEventESDao UBTEventESDao;
-    
-//    @Autowired RedisTemplate redisTempalte;
 
 	private ExecutorService executor = Executors.newFixedThreadPool(10);
 
@@ -60,7 +52,7 @@ public class UBTEventServiceImpl implements UBTEventService {
 	/**
 	 * 
 	 */
-	public void insertUbtEvent(final Event event) {
+	public void insertUbtEvent(final UBTEvent event) {
 		// TODO Auto-generated method stub
 		// UBTEventDao.save(event);
 		// UBTEventESDao.save(event);
@@ -74,7 +66,7 @@ public class UBTEventServiceImpl implements UBTEventService {
 	/**
 	 * 
 	 */
-	public void insertUbtEvents(List<Event> events) {
+	public void insertUbtEvents(List<UBTEvent> events) {
 		// TODO Auto-generated method stub
 		// UBTEventDao.save(events);
 		// UBTEventESDao.save(events);
@@ -85,13 +77,13 @@ public class UBTEventServiceImpl implements UBTEventService {
 		executor.execute(userSaveTask);
 	}
 
-	public List<Event> queryUbtEvents(String appId, Date startDate, Date endDate, String... actions) {
+	public List<UBTEvent> queryUbtEvents(String appId, Date startDate, Date endDate, String... actions) {
 		// TODO Auto-generated method stub
 //        if ((endDate.getTime() - startDate.getTime()) > DateUtil.MILLIS1DAY) {
 //            throw new RuntimeException("查询时间区间间隔不能大于24小时");
 //        }
 
-        List<Event> retVals = new ArrayList<Event>();
+        List<UBTEvent> retVals = new ArrayList<UBTEvent>();
         List<String> minutes = DateUtil.getMinutes(startDate, endDate);
 
         String action = null;
@@ -115,11 +107,11 @@ public class UBTEventServiceImpl implements UBTEventService {
             tasks.add(task);
         }
 
-        List<Future<List<Event>>> futures = null;
+        List<Future<List<UBTEvent>>> futures = null;
 		try {
 			futures = executor.invokeAll(tasks);
-			for (Future<List<Event>> future : futures) {
-	            List<Event> events = future.get();
+			for (Future<List<UBTEvent>> future : futures) {
+	            List<UBTEvent> events = future.get();
 	            if (events != null && events.size() > 0) {
 	                retVals.addAll(events);
 	            }
@@ -136,15 +128,15 @@ public class UBTEventServiceImpl implements UBTEventService {
 	}
 
 	class UBTEventTast implements Runnable {
-		private List<Event> events;
+		private List<UBTEvent> events;
 
-		public UBTEventTast(List<Event> events) {
+		public UBTEventTast(List<UBTEvent> events) {
 			this.events = events;
 		}
 
 		public void run() {
 			// TODO Auto-generated method stub
-			for (Event event : events) {
+			for (UBTEvent event : events) {
 				if (StringUtils.isEmpty(event.getSourceId())) {
 					logger.error("-------->UBTEvent的distinctId为空!");
 					return;
@@ -173,7 +165,7 @@ public class UBTEventServiceImpl implements UBTEventService {
 		}
 	}
 	
-	class QueryUbtEventTask implements Callable<List<Event>> {
+	class QueryUbtEventTask implements Callable<List<UBTEvent>> {
         private String key;
         private String startDateStr;
         private String endDateStr;
@@ -188,7 +180,7 @@ public class UBTEventServiceImpl implements UBTEventService {
             this.actions = actions;
         }
 
-        public List<Event> call() throws Exception {
+        public List<UBTEvent> call() throws Exception {
             String str = null;//(String) redisTempalte.opsForValue().get(key);
             if (str == null) {
                 logger.info("QueryUbtEventTask Redis hit null: " + key);
@@ -200,7 +192,7 @@ public class UBTEventServiceImpl implements UBTEventService {
 //                return events;
                 return null;
             } else {
-                return JSONArray.parseArray(str, Event.class);
+                return JSONArray.parseArray(str, UBTEvent.class);
             }
         }
 
@@ -208,12 +200,12 @@ public class UBTEventServiceImpl implements UBTEventService {
 
 	
 	@Autowired
-	private EventRepository eventRepository;
+	private UBTEventRepository ubtEventRepository;
 	
 	@Override
-	public List<Event> queryTodayUbtEvents(String appId, String... actions) {
+	public List<UBTEvent> queryTodayUbtEvents(String appId, String... actions) {
 		// TODO Auto-generated method stub
-		return eventRepository.findByAppId(appId);
+		return ubtEventRepository.findByAppId(appId);
 	}
 
 }
