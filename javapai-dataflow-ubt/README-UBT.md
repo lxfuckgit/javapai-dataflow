@@ -24,13 +24,13 @@
 
 ## 3、接口列表
 ### 3.1、同步采集时间接口
-```/getCurrentTimestamp()```
+```http://{hostname}:{port}/getCurrentTimestamp()```
 
 ### 3.2、UBT数据采集接口
-```/ubt/ubtEvent(Event event)```
+```http://{hostname}:{port}/ubt/ubtEvent(Event event)```
 
 ### 3.3、UBT数据批量采集接口
-```/ubt/ubtEventBatch(List<Event> events)```
+```http://{hostname}:{port}/ubt/ubtEventBatch(List<Event> events)```
 
 ## 4、UBT报文说明
 ### Event参数说明
@@ -41,7 +41,7 @@ userId     | String |  N  | 用户登录标识(注册账号) |
 sourceId   | String |  Y  | 数据来源标识(native取设备号，其它源取cookiesId)        |
 action     | String |  Y  | 用户跟目标交互的行为；可选值:<br>点击：`click`<br>输入：`input`<br>跳进：`goin`<br>跳出：`goto`<br>滑动：`slider`<br> 登录：`login`<br>  登出：`logout`<br>   |
 event      | String |  Y  | 目标的事件标识                |
-timestamp  | Long   |  N  | 事件发生的实际时间戳(精确到毫秒)，如果不填默认为服务器时间辍     |
+timestamp  | Long   |  N  | 事件发生的实际时间戳(精确到毫秒)，如果不填默认为服务器时间辍;    |
 properties | Map    |  N  | 预留属性(预留属性分为系统预留和业务预留)<br>系统预留可直接使用业务预留供接入方自定义        |
 
 ### 系统预留属性
@@ -49,6 +49,7 @@ properties | Map    |  N  | 预留属性(预留属性分为系统预留和业务
 |--|--|--|
 | $ip          | String      |设备的IP|
 | $os          | String      |操作系统|
+| $token       | String      |通信令牌|
 | $longitude   | String      |经度|
 | $latitude    | String      |纬度|
 | $network     | String      |网络类型|
@@ -58,6 +59,6 @@ properties | Map    |  N  | 预留属性(预留属性分为系统预留和业务
 
 ### 注意事项
 + 采集标识(appId)未注册时，数据会被无视。
-+ 采集时间(timestamp)超过当前时间时,数据会被无视。
++ 采集时间(timestamp)超过当前系统时间时,数据会被无视。
 
 
