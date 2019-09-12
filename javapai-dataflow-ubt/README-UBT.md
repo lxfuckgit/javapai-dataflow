@@ -29,8 +29,49 @@
 ### 3.2、UBT数据采集接口
 ```http://{hostname}:{port}/ubt/ubtEvent(Event event)```
 
+```
+{
+	"appId": "myAppId",
+	"sourceId": "myCookies",
+	"action": "goin",
+	"event": "home_view",
+	......
+	"properties": {
+		"$os": "android",
+		"$appVerson": "v1.1.0"
+		......
+	}
+}
+```
+
 ### 3.3、UBT数据批量采集接口
 ```http://{hostname}:{port}/ubt/ubtEventBatch(List<Event> events)```
+
+```
+[{
+	"appId": "myAppId",
+	"sourceId": "myCookies",
+	"action": "goin",
+	"event": "home_view",
+	......
+	"properties": {
+		"$os": "android",
+		"$appVerson": "v1.1.0"
+		......
+	}
+}, {
+	"appId": "myAppId",
+	"sourceId": "myCookies",
+	"action": "click",
+	"event": "banner_click",
+	......
+	"properties": {
+		"$os": "android",
+		"$appVerson": "v1.1.0"
+		......
+	}
+}]
+```
 
 ## 4、UBT报文说明
 ### Event参数说明
