@@ -39,7 +39,7 @@ public final class UBTRecord {
 	/**
 	 * 要监控的目标的事件名称，通常是同一组目标的名字，必选项。<br>
 	 * <br>
-	 * <strong>根据现场情况自行定义.</strong>比如"产品浏览"、"单期借款"、"借款银行卡"等等。
+	 * <strong>根据现场情况自行定义.</strong>比如"产品详情页"、"app主页"、"银行卡绑卡页"等等。
 	 */
 	private String event;
 
@@ -66,11 +66,11 @@ public final class UBTRecord {
 	 * <td><code>String</code>
 	 * <td><code>操作系统</code>
 	 * <tr>
-	 * <td><code>$osbanben</code>
+	 * <td><code>$osVersion</code>
 	 * <td><code>String</code>
 	 * <td><code>操作系统版本</code>
 	 * <tr>
-	 * <td><code>$appbanben</code>
+	 * <td><code>$appVersion</code>
 	 * <td><code>String</code>
 	 * <td><code>app版本</code>
 	 * <tr>
