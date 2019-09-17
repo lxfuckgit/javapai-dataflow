@@ -53,7 +53,7 @@ properties | Map    |  N  | 预留属性(预留属性分为系统预留和业务
 | $longitude   | String      |经度|
 | $latitude    | String      |纬度|
 | $network     | String      |网络类型|
-| $appVerson   | String      |app版本号|
+| $appVersion   | String     |app版本号|
 | $appChannel  | String      |app下载源|
 | $marketChannel| String     |渠道源|
 
