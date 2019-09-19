@@ -48,18 +48,10 @@ public final class UBTController {
 //	@CrossOrigin
 	@PostMapping("/ubt/ubtEvent")
 	public void ubtEvent(@RequestBody UBTRecord event) {
-		if(filterEvent(event)) {
+		if (filterEvent(event)) {
 			/**/
-			long currentTime = System.currentTimeMillis();
-			if (event.getTimestamp() <= 0 || event.getTimestamp() > currentTime) {
-				event.setTimestamp(currentTime);
-			}
-			/**/
-			ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-			if (event.getProperty("_ip") == null) {
-				String ip = getRemoteAddr(requestAttributes.getRequest());
-				event.addProperty("_ip", ip);
-			}
+			checkUBTRecord(event);
+
 			/**/
 			try {
 				kafkaTemplate.send(kafkaTopic, objectMapper.writeValueAsString(event));
@@ -120,28 +112,15 @@ public final class UBTController {
 	@RequestMapping(value = "/ubtEventLogin", method = RequestMethod.POST)
 	public void ubtEventLogin(@RequestBody UBTRecord event) {//@RequestBody String body这样接受会不会更快，不用反向序列化了。
 		logger.debug("------------>" + event.toString());
-		//trackSignup与trackEvent有什么区别或意义；biz用在什么地方，文档还提到日志埋点或是业务埋点 有用吗
 		
 		if (filterEvent(event)) {
-			long currentTime = System.currentTimeMillis();
-			if (event.getTimestamp() <= 0 || event.getTimestamp() > currentTime) {
-				event.setTimestamp(currentTime);
-			}
-
-			if (event.getProperty("_ip") == null) {
-				ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-				HttpServletRequest request = requestAttributes.getRequest();
-				String ip = getRemoteAddr(request);
-				event.addProperty("_ip", ip);
-			}
+			checkUBTRecord(event);
 			
 			if (!"".equalsIgnoreCase(event.getAction())) {
-				logger.warn("------->事件动作并非login,系统自动按login处理......");
+				logger.warn("------->登录行为中事件动作并非login,系统自动按login处理......");
 				event.setAction("login");
 			}
 
-			// UBTrackingService.trackSignup(event);
-//			kafkaTemplate.sendDefault("signup", body);
 			try {
 				kafkaTemplate.send(kafkaTopic, objectMapper.writeValueAsString(event));
 			} catch (JsonProcessingException e) {
@@ -180,20 +159,35 @@ public final class UBTController {
 	
 	
 	private boolean filterEvent(UBTRecord event) {
+		// logger.error("UBT数据的appId为空" + objectMapper.writeValueAsString(event));
 		if (StringUtils.isEmpty(event.getAppId())) {
 			logger.error("UBT数据({}-{})的appId为空!");
-			// logger.error("UBT数据的appId为空" + objectMapper.writeValueAsString(event));
 			return false;
 		} else if (StringUtils.isEmpty(event.getSourceId())) {
 			logger.error("UBT数据({}-{})的sourceId为空!");
-			// logger.error("UBT数据的distinctId为空" + objectMapper.writeValueAsString(event));
 			return false;
 		} else if (StringUtils.isEmpty(event.getAction())) {
 			logger.error("UBT数据({}-{})的action为空!");
-			// logger.error("UBT数据的action为空" +  objectMapper.writeValueAsString(event));
 			return false;
 		}
 		return true;
+	}
+	
+	private void checkUBTRecord(UBTRecord event) {
+		/**/
+		long currentTime = System.currentTimeMillis();
+		if (event.getTimestamp() <= 0 || event.getTimestamp() > currentTime) {
+			event.setTimestamp(currentTime);
+		}
+		
+		/**/
+		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		String ip = getRemoteAddr(requestAttributes.getRequest());
+		if (null == event.getProperty("_ip")) {
+			event.addProperty("_ip", ip);
+		}
+		// 预留一份ip,方便上报ip与实际ip对比.
+		event.addProperty("$ip", ip);
 	}
 	
 	public static String getRemoteAddr(HttpServletRequest request) {
@@ -211,7 +205,7 @@ public final class UBTController {
 			ip = request.getRemoteAddr();
 		}
 
-		logger.info("---->UBT RemoteAddr: " + ip);
+//		logger.info("---->UBT RemoteAddr: " + ip);
 		if (!StringUtils.isEmpty(ip)) {
 			String[] ipArray = ip.split(",");
 			if (ipArray != null && ipArray.length > 1) {
