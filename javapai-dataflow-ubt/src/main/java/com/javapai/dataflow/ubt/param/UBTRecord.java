@@ -50,7 +50,7 @@ public final class UBTRecord {
 
 	/**
 	 * UBT事件预留属性; <br>
-	 * <h4>系统级属性(约定前缀$开头，如$os)：</h4><br>
+	 * <h4>系统级属性(约定前缀_开头，如_os)：</h4><br>
 	 * <blockquote>
 	 * <table border=0 cellspacing=3 cellpadding=0>
 	 * <tr style="background-color: rgb(204, 204, 255);">
@@ -58,35 +58,35 @@ public final class UBTRecord {
 	 * <th align=left>-类型-
 	 * <th align=left>-描述-
 	 * <tr>
-	 * <td><code>$ip</code>
+	 * <td><code>_ip</code>
 	 * <td><code>String</code>
 	 * <td><code>请求IP</code>
 	 * <tr>
-	 * <td><code>$os</code>
+	 * <td><code>_os</code>
 	 * <td><code>String</code>
 	 * <td><code>操作系统</code>
 	 * <tr>
-	 * <td><code>$osVersion</code>
+	 * <td><code>_osVersion</code>
 	 * <td><code>String</code>
 	 * <td><code>操作系统版本</code>
 	 * <tr>
-	 * <td><code>$appVersion</code>
+	 * <td><code>_appVersion</code>
 	 * <td><code>String</code>
 	 * <td><code>app版本</code>
 	 * <tr>
-	 * <td><code>$longitude</code>
+	 * <td><code>_longitude</code>
 	 * <td><code>String</code>
 	 * <td><code>经度</code>
 	 * <tr>
-	 * <td><code>$latitude</code>
+	 * <td><code>_latitude</code>
 	 * <td><code>String</code>
 	 * <td><code>纬度</code>
 	 * <tr>
-	 * <td><code>$appchannel</code>
+	 * <td><code>_appchannel</code>
 	 * <td><code>String</code>
 	 * <td><code>app下载渠道</code>
 	 * <tr>
-	 * <td><code>$marketchannel</code>
+	 * <td><code>_marketchannel</code>
 	 * <td><code>String</code>
 	 * <td><code>活动推广渠道</code>
 	 * </tr>

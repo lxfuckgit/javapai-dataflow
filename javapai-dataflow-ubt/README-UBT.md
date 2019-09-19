@@ -37,8 +37,9 @@
 	"event": "home_view",
 	......
 	"properties": {
-		"$os": "android",
-		"$appVerson": "v1.1.0"
+		"_os": "android",
+		"_appVerson": "v1.1.0",
+		"myData1": "myDate",
 		......
 	}
 }
@@ -55,8 +56,8 @@
 	"event": "home_view",
 	......
 	"properties": {
-		"$os": "android",
-		"$appVerson": "v1.1.0"
+		"_os": "android",
+		"_appVerson": "v1.1.0"
 		......
 	}
 }, {
@@ -66,8 +67,8 @@
 	"event": "banner_click",
 	......
 	"properties": {
-		"$os": "android",
-		"$appVerson": "v1.1.0"
+		"_os": "android",
+		"_appVerson": "v1.1.0"
 		......
 	}
 }]
@@ -83,20 +84,20 @@ sourceId   | String |  Y  | 数据来源标识(native取设备号，其它源取
 action     | String |  Y  | 用户跟目标交互的行为；可选值:<br>点击：`click`<br>输入：`input`<br>跳进：`goin`<br>跳出：`goto`<br>滑动：`slider`<br> 登录：`login`<br>  登出：`logout`<br>   |
 event      | String |  Y  | 目标的事件标识                |
 timestamp  | Long   |  N  | 事件发生的实际时间戳(精确到毫秒)，如果不填默认为服务器时间辍;    |
-properties | Map    |  N  | 预留属性(预留属性分为系统预留和业务预留)<br>系统预留可直接使用业务预留供接入方自定义        |
+properties | Map    |  N  | 预留属性(预留属性分为系统预留和业务预留)<br>系统预留属性(强制用下划线'_'开头)key建议直接使用；业务扩展属性可根据需要自定义，例如userName,words,xxxName等...        |
 
 ### 系统预留属性
-|属性名                             |属性类型                     |属性说明|
+|属性名                              |属性类型                        |属性说明|
 |--|--|--|
-| $ip          | String      |设备的IP|
-| $os          | String      |操作系统|
-| $token       | String      |通信令牌|
-| $longitude   | String      |经度|
-| $latitude    | String      |纬度|
-| $network     | String      |网络类型|
-| $appVersion   | String     |app版本号|
-| $appChannel  | String      |app下载源|
-| $marketChannel| String     |渠道源|
+| _ip          | String      |设备的IP(非必填)|
+| _os          | String      |操作系统                    |
+| _token       | String      |通信令牌                    |
+| _longitude   | String      |经度                            |
+| _latitude    | String      |纬度                            |
+| _network     | String      |网络类型                    |
+| _appVersion  | String      |app版本号               |
+| _appChannel  | String      |app下载源               |
+| _marketChannel| String     |渠道源                        |
 
 ### 注意事项
 + 采集标识(appId)未注册时，数据会被无视。

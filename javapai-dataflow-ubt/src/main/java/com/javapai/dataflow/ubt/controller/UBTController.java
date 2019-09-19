@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -55,9 +56,9 @@ public final class UBTController {
 			}
 			/**/
 			ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-			if (event.getProperty("$ip") == null) {
+			if (event.getProperty("_ip") == null) {
 				String ip = getRemoteAddr(requestAttributes.getRequest());
-				event.addProperty("$ip", ip);
+				event.addProperty("_ip", ip);
 			}
 			/**/
 			try {
@@ -94,8 +95,8 @@ public final class UBTController {
 				event.setTimestamp(currentTime);
 			}
 
-			if (event.getProperty("$ip") == null) {
-				event.addProperty("$ip", ip);
+			if (event.getProperty("_ip") == null) {
+				event.addProperty("_ip", ip);
 			}
 		}
 
@@ -115,28 +116,40 @@ public final class UBTController {
 	 * @param body
 	 *            事件消息体
 	 */
-//	@CrossOrigin
-//	@RequestMapping(value = "/trackSignup", method = RequestMethod.POST)
-//	public void trackSignup(@RequestBody String body) {
-//		logger.info("------------>" + body);
-//		//trackSignup与trackEvent有什么区别或意义；biz用在什么地方，文档还提到日志埋点或是业务埋点 有用吗
-//		
-//		UBTEvent event = JSONObject.parseObject(body, UBTEvent.class);
-//		if (filterEvent(event)) {
-//			long currentTime = System.currentTimeMillis();
-//			if (event.getTimestamp() <= 0 || event.getTimestamp() > currentTime) {
-//				event.setTimestamp(currentTime);
-//			}
-//
-//			if (event.getProperty("$ip") == null) {
-////				String ip = Commons.getRemoteAddr(request);
-////				event.addProperty("$ip", ip);
-//			}
-//
-//			// UBTrackingService.trackSignup(event);
+	@org.springframework.web.bind.annotation.CrossOrigin
+	@RequestMapping(value = "/ubtEventLogin", method = RequestMethod.POST)
+	public void ubtEventLogin(@RequestBody UBTRecord event) {//@RequestBody String body这样接受会不会更快，不用反向序列化了。
+		logger.debug("------------>" + event.toString());
+		//trackSignup与trackEvent有什么区别或意义；biz用在什么地方，文档还提到日志埋点或是业务埋点 有用吗
+		
+		if (filterEvent(event)) {
+			long currentTime = System.currentTimeMillis();
+			if (event.getTimestamp() <= 0 || event.getTimestamp() > currentTime) {
+				event.setTimestamp(currentTime);
+			}
+
+			if (event.getProperty("_ip") == null) {
+				ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+				HttpServletRequest request = requestAttributes.getRequest();
+				String ip = getRemoteAddr(request);
+				event.addProperty("_ip", ip);
+			}
+			
+			if (!"".equalsIgnoreCase(event.getAction())) {
+				logger.warn("------->事件动作并非login,系统自动按login处理......");
+				event.setAction("login");
+			}
+
+			// UBTrackingService.trackSignup(event);
 //			kafkaTemplate.sendDefault("signup", body);
-//		}
-//	}
+			try {
+				kafkaTemplate.send(kafkaTopic, objectMapper.writeValueAsString(event));
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	
 //	@CrossOrigin
 //	@RequestMapping(value = "/getClientIP", method = RequestMethod.GET)
