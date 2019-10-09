@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,7 @@ public final class UBTController {
 	 * @param body
 	 *            事件消息体
 	 */
-//	@CrossOrigin
+	@CrossOrigin
 	@PostMapping("/ubt/ubtEvent")
 	public void ubtEvent(@RequestBody UBTRecord event) {
 		if (filterEvent(event)) {
@@ -67,6 +68,7 @@ public final class UBTController {
 	 * @param body
 	 *            事件消息体集合
 	 */
+	@CrossOrigin
 	@PostMapping("/ubt/ubtEventBatch")
 	public void ubtEventBatch(@RequestBody List<UBTRecord> events) {
 		/**/
