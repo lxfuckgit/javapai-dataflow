@@ -2,6 +2,9 @@ package com.javapai.dataflow.collector.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -312,5 +315,10 @@ public class DateUtil {
         d.setTime(date.getTime() + day * MILLIS1DAY);
         return d;
     }
-
+    
+	public static Long convertTimeToLong(String dateTime) {
+		LocalDateTime parse = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN));
+		return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+	}
+	
 }
