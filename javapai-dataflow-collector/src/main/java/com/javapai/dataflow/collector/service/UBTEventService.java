@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.javapai.dataflow.collector.domain.UBTEvent;
 
-public interface UBTEventService {
-	
+public interface UBTEventService {	
 	/**
 	 * 记录一条UBT事件行为.<br>
 	 * 
@@ -20,6 +19,39 @@ public interface UBTEventService {
 	 * @param events
 	 */
 	public void insertUbtEvents(List<UBTEvent> events);
+	
+	/**
+	 * 
+	 * @param domain
+	 * @param event
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	public List<UBTEvent> queryUbtEvent(String domain, String event, long startTime, long endTime);
+	
+	/**
+	 * 
+	 * @param domain
+	 * @param startTime
+	 * @param endTime
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public List<UBTEvent> queryUbtEvent(String domain, long startTime, long endTime, int page, int size);
+	
+	/**
+	 * 
+	 * @param domain
+	 * @param event
+	 * @param startTime
+	 * @param endTime
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public List<UBTEvent> queryUbtEvent(String domain, String event, long startTime, long endTime, int page, int size);
 
 	/**
 	 * 按条件查询UBT事件.<br>

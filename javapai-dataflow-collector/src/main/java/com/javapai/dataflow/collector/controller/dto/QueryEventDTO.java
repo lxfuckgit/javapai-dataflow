@@ -1,41 +1,23 @@
 package com.javapai.dataflow.collector.controller.dto;
 
-public class QueryEventDTO {
-	private String appId;
-	private String startDate;
-	private String endDate;
-	private String action;
+public class QueryEventDTO extends ExportEventDTO {
+	private int page;
+	private int size;
 
-	public String getAppId() {
-		return appId;
+	public int getPage() {
+		return page;
 	}
 
-	public void setAppId(String appId) {
-		this.appId = appId;
+	public void setPage(int page) {
+		this.page = page;
 	}
 
-	public String getStartDate() {
-		return startDate;
+	public int getSize() {
+		return size;
 	}
 
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 }
