@@ -11,11 +11,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -40,6 +43,9 @@ public class UBTEventServiceImpl implements UBTEventService {
 	LocalDateTime midnight = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
 	
 	public static final String pattern = "yyMMddHHmmss";
+	
+	@Resource
+	private RedisTemplate<String, Long> redisTemplate;
 
 	private ExecutorService executor = Executors.newFixedThreadPool(10);
 
@@ -61,6 +67,29 @@ public class UBTEventServiceImpl implements UBTEventService {
 
 		UBTEventTast task = new UBTEventTast(Arrays.asList(event));
 		executor.execute(task);
+		
+		/* pv/uv指标任务 */
+		long millSecond = ChronoUnit.MILLIS.between(LocalDateTime.now(), midnight);
+		String pvKey = event.getAppId() + "#" + event.getEvent() + "#" + event.getProperty("$ip");
+//		if (StringUtils.isEmpty(redisTemplate.opsForValue().get(pvKey))) {
+		if (redisTemplate.opsForValue().size(pvKey) == 0L) {
+			String key = "pvKey#" + event.getAppId();
+			redisTemplate.opsForValue().increment(key, 1L);//increment相对于get(key) + 1当getKey为null时，完了。
+//			redisTemplate.opsForValue().set(key, redisTemplate.opsForValue().get(key) + 1);
+			redisTemplate.expire(key, millSecond, TimeUnit.MILLISECONDS);
+		}
+		//当天持续访问(>1次)时，记录持续次数.
+		redisTemplate.opsForValue().increment(pvKey, 1);
+		redisTemplate.expire(pvKey, millSecond, TimeUnit.MILLISECONDS);
+
+		String uvKey = event.getAppId() + "#" + event.getProperty("$ip");
+		if (redisTemplate.opsForValue().size(uvKey) == 0) {
+			String key = "uvKey#" + event.getAppId();
+			redisTemplate.opsForValue().increment(key, 1);
+			redisTemplate.expire(key, millSecond, TimeUnit.MILLISECONDS);
+		}
+		redisTemplate.opsForValue().increment(uvKey, 1);
+		redisTemplate.expire(uvKey, millSecond, TimeUnit.MILLISECONDS);
 	}
 
 	/**
