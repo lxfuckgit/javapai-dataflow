@@ -15,9 +15,19 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections4.IteratorUtils;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -55,9 +65,6 @@ public class UBTEventServiceImpl implements UBTEventService {
 	@Autowired
 	private UBTBusiness ubtBusiness;
 
-	/**
-	 * 
-	 */
 	public void insertUbtEvent(final UBTEvent event) {
 		// TODO Auto-generated method stub
 		// UBTEventDao.save(event);
@@ -92,9 +99,6 @@ public class UBTEventServiceImpl implements UBTEventService {
 		redisTemplate.expire(uvKey, millSecond, TimeUnit.MILLISECONDS);
 	}
 
-	/**
-	 * 
-	 */
 	public void insertUbtEvents(List<UBTEvent> events) {
 		// TODO Auto-generated method stub
 		// UBTEventDao.save(events);
@@ -155,6 +159,66 @@ public class UBTEventServiceImpl implements UBTEventService {
         
 //		return UBTrackEventBusiness.queryUbtEvents(domain, startDate, endDate, actions);
 	}
+	
+	@Override
+	public List<UBTEvent> queryUbtEvent(String domain, String event, long startTime, long endTime) {
+		// TODO Auto-generated method stub
+		BoolQueryBuilder qBuilder = QueryBuilders.boolQuery();
+		if (!StringUtils.isEmpty(domain)) {
+			qBuilder.must(QueryBuilders.matchQuery("appId", domain));
+		}
+		if (startTime > 0L) {
+			qBuilder.filter(QueryBuilders.rangeQuery("timestamp").gte(startTime));
+		}
+		if (endTime > 0L) {
+			qBuilder.filter(QueryBuilders.rangeQuery("timestamp").lte(endTime));
+		}
+		if (!StringUtils.isEmpty(event)) {
+			qBuilder.filter(QueryBuilders.matchQuery("event", event));
+		}
+		
+		return IteratorUtils.toList(ubtEventRepository.search(qBuilder).iterator());
+	}
+	
+	@Override
+	public List<UBTEvent> queryUbtEvent(String domain, long startTime, long endTime, int page, int size) {
+		// TODO Auto-generated method stub
+		return queryUbtEvent(domain, null, startTime, endTime, page, size);
+	}
+	
+	@Override
+	public List<UBTEvent> queryUbtEvent(String domain, String event, long startTime, long endTime, int page, int size) {
+		// TODO Auto-generated method stub
+		Pageable pageable = PageRequest.of(page, size);
+		
+		/* from elasticsearch */
+		BoolQueryBuilder qBuilder = QueryBuilders.boolQuery();
+		if (!StringUtils.isEmpty(domain)) {
+			qBuilder.must(QueryBuilders.matchQuery("appId", domain));
+		}
+//		if (startTime > 0L || endTime > 0L) {
+//			qBuilder.filter(QueryBuilders.rangeQuery("timestamp").gte(startTime).lte(endTime));
+//		}
+		if (startTime > 0L) {
+			qBuilder.filter(QueryBuilders.rangeQuery("timestamp").gte(startTime));
+		}
+		if (endTime > 0L) {
+			qBuilder.filter(QueryBuilders.rangeQuery("timestamp").lte(endTime));
+		}
+		if (!StringUtils.isEmpty(event)) {
+			qBuilder.filter(QueryBuilders.matchQuery("event", event));
+		}
+		@SuppressWarnings("rawtypes")
+		List<SortBuilder> sortList = new ArrayList<>();
+//		sortList.add(SortBuilders.fieldSort("appId").order(SortOrder.DESC));
+		sortList.add(SortBuilders.fieldSort("timestamp").order(SortOrder.DESC));
+		SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.matchAllQuery(),qBuilder,sortList).setPageable(pageable);
+		return ubtEventRepository.search(searchQuery).getContent();
+//		return ubtEventRepository.search(qBuilder, pageable).getContent();
+		
+		/* from hbase */
+	}
+	
 
 	class UBTEventTast implements Runnable {
 		private List<UBTEvent> events;
