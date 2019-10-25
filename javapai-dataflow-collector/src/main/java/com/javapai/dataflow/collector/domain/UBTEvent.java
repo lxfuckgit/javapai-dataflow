@@ -26,9 +26,9 @@ public class UBTEvent  {
     private String sourceId;
 
     /**
-     * 用户注册成功后，存放注册前的distinctId，而distinctId则填充注册账号。
+     * 用户标识(用户注册成功后的记录标识);
      */
-    private String originalId;
+    private String userId;
 
     /**
      * 事件发生的实际时间戳，精确到毫秒；
@@ -122,12 +122,20 @@ public class UBTEvent  {
         return properties.get(key);
     }
 
-    public String getOriginalId() {
-        return originalId;
-    }
+//    public String getOriginalId() {
+//        return originalId;
+//    }
+//
+//    public void setOriginalId(String originalId) {
+//        this.originalId = originalId;
+//    }
 
-    public void setOriginalId(String originalId) {
-        this.originalId = originalId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+    
 }
