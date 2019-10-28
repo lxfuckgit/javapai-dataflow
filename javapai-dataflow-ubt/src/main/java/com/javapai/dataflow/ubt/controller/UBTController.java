@@ -161,15 +161,18 @@ public final class UBTController {
 	
 	
 	private boolean filterEvent(UBTRecord event) {
-		// logger.error("UBT数据的appId为空" + objectMapper.writeValueAsString(event));
 		if (StringUtils.isEmpty(event.getAppId())) {
-			logger.error("UBT数据({}-{})的appId为空!");
+			try {
+				logger.error("UBT数据({})的appId为空!", objectMapper.writeValueAsString(event));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 			return false;
 		} else if (StringUtils.isEmpty(event.getSourceId())) {
-			logger.error("UBT数据({}-{})的sourceId为空!");
+			logger.error("UBT数据({} {})的sourceId为空!", event.getAppId(), event.getEvent());
 			return false;
-		} else if (StringUtils.isEmpty(event.getAction())) {
-			logger.error("UBT数据({}-{})的action为空!");
+		} else if (StringUtils.isEmpty(event.getEvent()) || StringUtils.isEmpty(event.getAction())) {
+			logger.error("UBT数据({} {})的event或action为空!", event.getAppId(), event.getSourceId());
 			return false;
 		}
 		return true;
