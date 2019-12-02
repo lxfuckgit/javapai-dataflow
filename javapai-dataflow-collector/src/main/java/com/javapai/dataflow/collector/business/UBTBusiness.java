@@ -61,8 +61,9 @@ public class UBTBusiness {
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 }
