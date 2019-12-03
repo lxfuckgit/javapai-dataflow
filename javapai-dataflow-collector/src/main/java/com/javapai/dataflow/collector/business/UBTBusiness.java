@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ import ru.yandex.clickhouse.ClickHouseConnection;
 @Service
 public class UBTBusiness {
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	static {
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+	}
+	
 //  @Autowired
 //  private UBTEventESDao esDao;
 	
