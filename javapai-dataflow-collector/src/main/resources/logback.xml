@@ -21,6 +21,17 @@
 		</encoder>
 	</appender>
 	
+<!--     <appender name="Kafka" class="com.javapai.dataflow.sl4j.logback.LogbackAppender"> -->
+<!--     	<source>test-application</source> -->
+<!--         <contextStrategy class="com.javapai.dataflow.sl4j.context.KafkaContextStrategy"> -->
+<!--             <config class="com.javapai.dataflow.sl4j.config.KafkaConfig"> -->
+<!--                 <addresses>173.32.10.202:9092</addresses> -->
+<!--                 <topic>topic1</topic> -->
+<!--             </config> -->
+<!--         </contextStrategy> -->
+<!--         <deliveryStrategy class="com.javapai.dataflow.sl4j.delivery.AsyncDeliveryStrategy"/> -->
+<!--     </appender> -->
+
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.apache" level="ERROR"/>
 	<root level="INFO">

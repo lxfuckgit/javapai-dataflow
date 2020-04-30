@@ -321,4 +321,10 @@ public class DateUtil {
 		return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 	}
 	
+	public String longToString(String dateFormat, Long millSec) {
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		Date date = new Date(millSec);
+		return sdf.format(date);
+	}
+	
 }

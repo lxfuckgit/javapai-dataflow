@@ -3,12 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.javapai.dataflow</groupId>
 	<artifactId>javapai-dataflow</artifactId>
-	<version>1.0.0</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>javapai-dataflow-ubt</module>
 		<module>javapai-dataflow-collector</module>
+		<module>javapai-dataflow-sl4j</module>
 	</modules>
 	
 	<parent>

@@ -37,5 +37,16 @@ public class UBTConsumer {
 			ubtEventService.insertUbtEvents(JSONArray.parseArray(record.value(), UBTEvent.class));
 		}
 	}
+	
+	/**
+	 * 
+	 * @param record
+	 */
+	@KafkaListener(id = "sl4jlog-comsumer", topics = { "sl4j-log" })
+	public void listenSl4j(ConsumerRecord<String, String> record) {
+		logger.info("------------->kafka的topic: " + record.topic());
+		logger.info("------------->kafka的key: " + record.key());
+		logger.info("------------->kafka的value: " + record.value());
+	}
 
 }
