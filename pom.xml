@@ -19,7 +19,7 @@
 	</parent>
 	
 	<properties>
-		<jackson-verison>2.9.9</jackson-verison>
+		<jackson-verison>2.10.0.pr1</jackson-verison>
 		<spring-boot-version>2.1.4.RELEASE</spring-boot-version>
 		<spring-kafka-version>2.2.0.RELEASE</spring-kafka-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
